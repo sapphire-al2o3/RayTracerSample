@@ -47,4 +47,12 @@ void ppm_output(const Image<Vec3>& image, const std::string& filename)
     file.close();
 }
 
+void divide(const Image<Vec3>& image, double k) {
+    for(int i = 0; i < image.height; i++) {
+        for(int j = 0; j < image.width; j++) {
+            image.lines[i][j] = image.lines[i][j] / k;
+        }
+    }
+}
+
 #endif
