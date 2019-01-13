@@ -37,9 +37,9 @@ inline void WriteLine24(const Vec3* src, FILE* fp, int length)
 {
 	for(int i = 0; i < length; i++) {
 		unsigned char buf[3] = {
-			clamp((int)(255 * src->z), 0, 255),
-			clamp((int)(255 * src->y), 0, 255),
-			clamp((int)(255 * src->x), 0, 255)
+			(unsigned char)clamp((int)(255 * src->z), 0, 255),
+			(unsigned char)clamp((int)(255 * src->y), 0, 255),
+			(unsigned char)clamp((int)(255 * src->x), 0, 255)
 		};
 		fwrite(buf, 3, 1, fp);
 		src++;
