@@ -2,3 +2,4 @@
 *.obj
 *.ppm
 *.bmp
+.vscode/
