@@ -55,4 +55,13 @@ void divide(const Image<Vec3>& image, double k) {
     }
 }
 
+void gamma_correction(const Image<Vec3>& image) {
+    for(int i = 0; i < image.height; i++) {
+        for(int j = 0; j < image.width; j++) {
+            Vec3 c = image.lines[i][j];
+            image.lines[i][j] = Vec3(std::pow(c.x, 1 / 2.2), std::pow(c.y, 1 / 2.2), std::pow(c.z, 1 / 2.2));
+        }
+    }
+}
+
 #endif

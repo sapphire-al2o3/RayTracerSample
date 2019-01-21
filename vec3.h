@@ -60,20 +60,6 @@ public:
         z /= v.z;
         return *this;
     }
-
-    // ワールド座標からローカル座標に変換する
-    Vec3 workdToLocal(const Vec3& v, const Vec3& s, const Vec3& t, const Vec3& n)
-    {
-        return Vec3(dot(v, s), dot(v, t), dot(v, n));
-    }
-
-    Vec3 localToWorld(const Vec3& v, const Vec3& s, const Vec3& t, const Vec3& n)
-    {
-        Vec3 a = Vec3(s.x, n.x, t.x);
-        Vec3 b = Vec3(s.y, n.y, t.y);
-        Vec3 c = Vec3(s.z, n.z, t.z);
-        return Vec3(dot(v, a), dot(v, b), dot(v, c));
-    }
 };
 
 Vec3 operator+(const Vec3& v1, const Vec3& v2)
@@ -168,6 +154,20 @@ void orthonormalBasis(const Vec3& v1, Vec3& v2, Vec3& v3)
 
     v2 = normalize(v2 - dot(v1, v2) * v1);
     v3 = cross(v1, v2);
+}
+
+// ワールド座標からローカル座標に変換する
+Vec3 worldToLocal(const Vec3& v, const Vec3& s, const Vec3& t, const Vec3& n)
+{
+    return Vec3(dot(v, s), dot(v, t), dot(v, n));
+}
+
+Vec3 localToWorld(const Vec3& v, const Vec3& s, const Vec3& t, const Vec3& n)
+{
+    Vec3 a = Vec3(s.x, n.x, t.x);
+    Vec3 b = Vec3(s.y, n.y, t.y);
+    Vec3 c = Vec3(s.z, n.z, t.z);
+    return Vec3(dot(v, a), dot(v, b), dot(v, c));
 }
 
 // 出力
