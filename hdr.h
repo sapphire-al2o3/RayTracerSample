@@ -9,16 +9,13 @@
 
 void ReadRLE(unsigned char* channel, FILE* fp, int length) {
     int index = 0;
-    std::cout << "length:" << length << std::endl;
     while (index < length) {
         unsigned char buf[1];
         fread(buf, 1, 1, fp);
-        int n = buf[0] & 127;
-        int k = buf[0];
-        std::cout << "n:" << k << ":" << n << std::endl;
-        if (buf[0] >= 128) {
+        int n = buf[0];
+        if (n > 128) {
             fread(buf, 1, 1, fp);
-            for (int k = 0; k < n; k++) {
+            for (int k = 0; k < (n & 127); k++) {
                 channel[index++] = buf[0];
             }
         } else {
@@ -28,7 +25,7 @@ void ReadRLE(unsigned char* channel, FILE* fp, int length) {
             }
         }
     }
-    std::cout << "index:" << index << std::endl;
+    
 }
 
 int LoadHDRImage(const char* fileName, Image<Vec3>& image) {
@@ -120,7 +117,7 @@ int LoadHDRImage(const char* fileName, Image<Vec3>& image) {
         fread(buf, 2, 1, fp);
         int count = (buf[0] << 8) + buf[1];
 
-        std::cout << i << "-" << count << ":" << ftell(fp) << std::endl;
+        // std::cout << i << "-" << count << ":" << ftell(fp) << std::endl;
 
         ReadRLE(r, fp, count);
         ReadRLE(g, fp, count);
@@ -128,7 +125,7 @@ int LoadHDRImage(const char* fileName, Image<Vec3>& image) {
         ReadRLE(e, fp, count);
 
         for (int j = 0; j < count; j++) {
-            double p = pow(2, 128 - e[j]);
+            double p = pow(2, e[j] - 128);
             image.lines[i][j] = Vec3(r[j] * p, g[j] * p, b[j] * p);
         }
         // break;
