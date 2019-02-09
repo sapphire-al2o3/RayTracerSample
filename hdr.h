@@ -94,9 +94,6 @@ int LoadHDRImage(const char* fileName, Image<Vec3>& image) {
     if (image.lines != nullptr) {
         std::cout << "w:" << image.width << std::endl;
         std::cout << "h:" << image.height << std::endl;
-        // image.lines[0][359] = Vec3(0, 0, 0);
-        std::cout << image.lines[0][359] << std::endl;
-        
     }
 
     for (int j = 0; j < 359; j++) {
@@ -125,7 +122,7 @@ int LoadHDRImage(const char* fileName, Image<Vec3>& image) {
         ReadRLE(e, fp, count);
 
         for (int j = 0; j < count; j++) {
-            double p = pow(2, e[j] - 128);
+            double p = ldexp(1, e[j] - 128 - 8);
             image.lines[i][j] = Vec3(r[j] * p, g[j] * p, b[j] * p);
         }
         // break;
