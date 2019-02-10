@@ -122,10 +122,9 @@ int LoadHDRImage(const char* fileName, Image<Vec3>& image) {
         ReadRLE(e, fp, count);
 
         for (int j = 0; j < count; j++) {
-            double p = ldexp(1, e[j] - 128 - 8);
+            double p = ldexp(1, e[j] - (128 + 8));
             image.lines[i][j] = Vec3(r[j] * p, g[j] * p, b[j] * p);
         }
-        // break;
     }
 
     delete[] r;

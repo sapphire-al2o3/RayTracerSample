@@ -10,22 +10,28 @@ int main(int argc, char *argv[]) {
     std::cout << "width: " << img.width << std::endl;
     std::cout << "height: " << img.height << std::endl;
 
-    double m = 0;
+    double max = 0;
+    double min = 1000;
     for(int i = 0; i < img.height * img.width; i++) {
         Vec3 c = img.lines[0][i];
-        if (c.x > m) m = c.x;
-        if (c.y > m) m = c.y;
-        if (c.z > m) m = c.z;
+        if (c.x > max) max = c.x;
+        if (c.y > max) max = c.y;
+        if (c.z > max) max = c.z;
+        if (c.x < min) min = c.x;
+        if (c.y < min) min = c.y;
+        if (c.z < min) min = c.z;
     }
 
     for(int i = 0; i < img.height * img.width; i++) {
         Vec3 c = img.lines[0][i];
-        double y = c.y;
-        c.x = c.x / m;
-        c.y = c.y / m;
-        c.z = c.z / m;
+        c.x = c.x / max;
+        c.y = c.y / max;
+        c.z = c.z / max;
         img.lines[0][i] = c;
     }
+
+    std::cout << "max" << max << std::endl;
+    std::cout << "min" << min << std::endl;
 
     SaveBitmap("hdr_test.bmp", img);
     return 0;
