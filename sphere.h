@@ -30,9 +30,9 @@ public:
         double t1 = -b - std::sqrt(d);
         double t2 = -b + std::sqrt(d);
 
-        if(t1 > 10000 | t2 < 0) return false;
+        if(t1 > 10000 | t2 < 0.001) return false;
         double t = t1;
-        if(t1 < 0)
+        if(t1 < 0.001)
         {
             t = t2;
             if(t2 > 10000)

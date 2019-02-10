@@ -43,6 +43,8 @@ public:
     
     IBL(const std::string& filename) {
         LoadHDRImage(filename.c_str(), image);
+        width = image.width;
+        height = image.height;
     }
 
     Vec3 getRadiance(const Ray& ray) const {
