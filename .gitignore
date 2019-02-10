@@ -2,4 +2,6 @@
 *.obj
 *.ppm
 *.bmp
+*.png
+*.hdr
 .vscode/
