@@ -15,7 +15,7 @@ void ReadRLE(unsigned char* channel, FILE* fp, int length) {
         int n = buf[0];
         if (n > 128) {
             fread(buf, 1, 1, fp);
-            for (int k = 0; k < (n & 127); k++) {
+            for (int k = 0; k < n - 128; k++) {
                 channel[index++] = buf[0];
             }
         } else {
@@ -51,24 +51,8 @@ int LoadHDRImage(const char* fileName, Image<Vec3>& image) {
     int height = 0;
     int line;
     fread(buf, 3, 1, fp);
-    if (buf[1] == 'X') {
-        while (1) {
-            fread(buf, 1, 1, fp);
-            if (buf[0] == 0x20) {
-                break;
-            }
-            width = width * 10 + (buf[0] - '0');
-            std::cout << width << std::endl;
-        }
-        fread(buf, 3, 1, fp);
-        while (1) {
-            fread(buf, 1, 1, fp);
-            if (buf[0] == 0x0A) {
-                break;
-            }
-            height = height * 10 + (buf[0] - '0');
-        }
-    } else if (buf[1] == 'Y') {
+    
+    if (buf[1] == 'Y') {
         while (1) {
             fread(buf, 1, 1, fp);
             if (buf[0] == 0x20) {
@@ -87,17 +71,8 @@ int LoadHDRImage(const char* fileName, Image<Vec3>& image) {
         line = height;
     }
 
-    if (image.lines == NULL) {
+    if (image.lines == nullptr) {
         image.create(width, height);
-    }
-
-    if (image.lines != nullptr) {
-        std::cout << "w:" << image.width << std::endl;
-        std::cout << "h:" << image.height << std::endl;
-    }
-
-    for (int j = 0; j < 359; j++) {
-        image.lines[0][j] = Vec3(0, 0, 0);
     }
 
     unsigned char* r = new unsigned char[width];
@@ -113,8 +88,6 @@ int LoadHDRImage(const char* fileName, Image<Vec3>& image) {
         }
         fread(buf, 2, 1, fp);
         int count = (buf[0] << 8) + buf[1];
-
-        // std::cout << i << "-" << count << ":" << ftell(fp) << std::endl;
 
         ReadRLE(r, fp, count);
         ReadRLE(g, fp, count);

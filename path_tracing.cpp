@@ -4,6 +4,7 @@
 #include "camera.h"
 #include "light.h"
 #include "sphere.h"
+#include "plane.h"
 #include "aggregate.h"
 #include "image.h"
 #include "bmp.h"
@@ -35,8 +36,8 @@ Vec3 radiance(const Ray& init_ray, const Aggregate& aggregate)
             Vec3 wo_local = worldToLocal(-ray.direction, s, n, t);
         
             // マテリアルと光源
-            auto hitMaterial = res.hitSphere->material;
-            auto hitLight = res.hitSphere->light;
+            auto hitMaterial = res.hitShape->material;
+            auto hitLight = res.hitShape->light;
 
             // Leの加算
             col += throughput * hitLight->Le();
@@ -74,10 +75,10 @@ int main() {
     // サンプル数
     const int N = 100;
 
-    Image<Vec3> img(512, 512);
+    Image<Vec3> img(256, 256);
     PinholeCamera cam(Vec3(0, 0, 1), Vec3(0, 0, -1), 1);
 
-    auto mat1 = std::make_shared<Diffuse>(Vec3(0.9));
+    auto mat1 = std::make_shared<Diffuse>(Vec3(0.9, 0.2, 0.2));
     auto mat2 = std::make_shared<Diffuse>(Vec3(0.2, 0.2, 0.8));
 
     auto light1 = std::make_shared<Light>(Vec3(0));
@@ -85,7 +86,8 @@ int main() {
 
     Aggregate aggregate;
     // 床
-    aggregate.add(std::make_shared<Sphere>(Vec3(0, -10001, 0), 10000, mat1, light1));
+    // aggregate.add(std::make_shared<Sphere>(Vec3(0, -10001, 0), 10000, mat1, light1));
+    aggregate.add(std::make_shared<Plane>(Vec3(0, -0.5, 0), Vec3(0, 1, 0), mat1, light1));
     // 球
     aggregate.add(std::make_shared<Sphere>(Vec3(0, 0, -3), 1, mat2, light2));
 
