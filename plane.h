@@ -14,7 +14,7 @@ public:
     Vec3 center;
     Vec3 normal;
 
-    Plane(const Vec3& _center, const Vec3& _normal, const std::shared_ptr<Material>& _material, const std::shared_ptr<Light>& _light) : center(_center), normal(_normal), Shape(_material, _light) {}
+    Plane(const Vec3& _center, const Vec3& _normal, const std::shared_ptr<Material>& _material, const std::shared_ptr<Light>& _light) : center(_center), normal(normalize(_normal)), Shape(_material, _light) {}
 
     bool intersect(const Ray& ray, Hit& res) const
     {
