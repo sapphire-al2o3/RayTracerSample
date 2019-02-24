@@ -14,13 +14,14 @@ public:
     Vec3 center;
     Vec3 normal;
 
+    Plane(const Vec3& _center, const Vec3& _normal) : center(_center), normal(normalize(_normal)) {}
     Plane(const Vec3& _center, const Vec3& _normal, const std::shared_ptr<Material>& _material, const std::shared_ptr<Light>& _light) : center(_center), normal(normalize(_normal)), Shape(_material, _light) {}
 
     bool intersect(const Ray& ray, Hit& res) const
     {
         double c = dot(normal, ray.direction);
 
-        if(c < 0.001 && c > -0.001) return false;
+        if(c > -0.001) return false;
 
         double h = dot(center, normal);
         double t = (h - dot(normal, ray.origin)) / c;
