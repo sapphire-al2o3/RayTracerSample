@@ -41,4 +41,36 @@ public:
     }
 };
 
+class ThinLensCamera : public Camera
+{
+public:
+    double a;   // イメージセンサーからレンズ中心までの距離
+    double b;   // レンズ中心からピントの合う平面までの距離
+    double f;   // 焦点距離
+    double lensRadius;  // レンズの半径
+    Vec3 lensCenter;    // レンズの中心位置
+    ThinLensCamera(const Vec3& _camPos, const Vec3& _camForward, const Vec3& focusPoint, double _a, double _lensRadius) :
+    Camera(_camPos, _camForward), a(_a), lensRadius(_lensRadius)
+    {
+        double cos = dot(camForward, normalize(focusPoint - camPos));
+        b = cos * (focusPoint - camPos).length() - a;
+        f = 1 / (1 / a + 1 / b);
+        lensCenter = camPos + a * camForward;
+    }
+
+    Ray getRay(double u, double v) const
+    {
+        Vec3 sensorPos = camPos + u * camRight + v * camUp;
+        Vec3 r = normalize(lensCenter - sensorPos);
+        Vec3 pf = sensorPos + (a + b) / dot(camForward, r) * r;
+
+        // レンズ上の点をサンプリング
+        double x, y;
+        sampleDisk(x, y);
+        Vec3 l = lensCenter + lensRadius * (x * camRight + y * camUp);
+
+        return Ray(l, normalize(pf - l));
+    }
+};
+
 #endif

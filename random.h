@@ -1,6 +1,8 @@
 #ifndef RANDOM_H
 #define RANDOM_H
 
+#define _USE_MATH_DEFINES
+#include <cmath>
 #include <random>
 
 std::random_device rnd_dev;
