@@ -54,10 +54,10 @@ Vec3 radiance(const Ray& init_ray, const Aggregate& aggregate, const Sky& sky) {
 }
 
 int main() {
-    const int N = 500;
+    const int N = 100;
 
-    Image<Vec3> img(256, 256);
-    PinholeCamera cam(Vec3(0, 0, 1), Vec3(0, 0, -1), 1);
+    Image<Vec3> img(512, 512);
+    ThinLensCamera cam(Vec3(0, 0, 1), Vec3(0, 0, -1), Vec3(0, 0, -3), 1, 0.1);
 
     auto mat1 = std::make_shared<Diffuse>(Vec3(0.9));
     // auto mat2 = std::make_shared<Diffuse>(Vec3(0.2, 0.2, 0.8));
@@ -69,7 +69,7 @@ int main() {
     aggregate.add(std::make_shared<Sphere>(Vec3(0, -10001, 0), 10000, mat1, light1));
     aggregate.add(std::make_shared<Sphere>(Vec3(0, 0, -3), 1, mat2, light1));
 
-    IBL sky("venice_dawn_1_1k.hdr");
+    IBL sky("PaperMill_E_3k.hdr");
 
     #pragma omp parallel for schedule(dynamic, 1)
     for(int i = 0; i < img.width; i++) {
